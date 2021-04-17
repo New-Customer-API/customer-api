@@ -2,15 +2,23 @@ package br.com.customer.api.customer.api.api.dto;
 
 import br.com.customer.api.customer.api.util.enums.DocumentType;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.List;
 
-@Data
+/**
+ * Customer to be created
+ *
+ * @author amanda
+ */
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class CustomerRequestDTO {
@@ -22,12 +30,13 @@ public class CustomerRequestDTO {
     private String nickName;
 
     @NotBlank
+    @NotNull
     @Size(min = 11, max = 18)
     private String document;
 
     @NotNull
     private DocumentType documentType;
 
-    private List<String> email;
+    private List<@Email String> email;
 
 }

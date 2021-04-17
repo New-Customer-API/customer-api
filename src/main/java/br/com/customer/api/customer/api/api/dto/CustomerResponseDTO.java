@@ -6,6 +6,11 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 
+/**
+ * Existing customer
+ *
+ * @author amanda
+ */
 @Data
 @NoArgsConstructor
 public class CustomerResponseDTO {
