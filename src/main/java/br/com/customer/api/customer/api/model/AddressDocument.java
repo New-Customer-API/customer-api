@@ -4,10 +4,15 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * The address'contact
+ * @author amanda
+ */
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class AddressDocument implements BaseDocument {
+public class AddressDocument {
 
     private String country;
     private String city;
