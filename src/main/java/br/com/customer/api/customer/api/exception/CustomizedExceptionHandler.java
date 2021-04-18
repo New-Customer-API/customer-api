@@ -11,6 +11,7 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import java.util.Date;
+import java.util.Objects;
 
 /**
  * Intercepts exceptions and sets the correct pattern
@@ -59,9 +60,11 @@ public class CustomizedExceptionHandler extends ResponseEntityExceptionHandler {
 
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+
+        final String message = Objects.nonNull(ex.getFieldError()) ? ex.getFieldError().getField() + " " + ex.getFieldError().getDefaultMessage() : "";
         ExceptionResponse exceptionResponse = new ExceptionResponse.ExceptionResponseBuilder()
                 .timesTamp(new Date())
-                .message(ex.getFieldError().getField() + " " + ex.getFieldError().getDefaultMessage())
+                .message(message)
                 .path(request.getDescription(false))
                 .error(status.getReasonPhrase())
                 .status(400)

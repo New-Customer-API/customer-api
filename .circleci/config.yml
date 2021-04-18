@@ -1,9 +1,39 @@
-version: 2.1
+version: 2.0
 
-orbs:
-  maven: circleci/maven@1.1
+jobs:
+  test:
+    docker:
+      - image: circleci/openjdk:stretch
+    steps:
+      - checkout
+      - run : ./mvnw test
+      - store_artifacts:
+          path:  target
+
+  build:
+    docker:
+      - image: circleci/openjdk:stretch
+    steps:
+      - checkout
+      - run: ./mvnw -Dmaven.test.skip=true -Dmaven.javadoc.skip=true package
+
+  analyse:
+    docker:
+      - image: circleci/openjdk:stretch
+    steps:
+      - checkout
+      - run:
+          name: Analyze on SonarCloud
+          command: ./mvnw verify sonar:sonar -Pcoverage
 
 workflows:
-  maven_test:
+  version: 2
+
+  build-then-test:
     jobs:
-      - maven/test
+      - build
+      - test:
+          requires:
+            - build
+      - analyse:
+          context: SonarCloud
