@@ -32,15 +32,6 @@ public interface CustomerService {
      */
     ListWrapper<CustomerResponseDTO> getAllCustom(final PageRequestDto page, final CustomerFilter customerFilter);
 
-
-    /**
-     * Service method that search all customers
-     *
-     * @param page pagination definition
-     * @return list of customers
-     */
-    ListWrapper<CustomerResponseDTO> getAll(final PageRequestDto page);
-
     /**
      * Delete a customer by id
      *

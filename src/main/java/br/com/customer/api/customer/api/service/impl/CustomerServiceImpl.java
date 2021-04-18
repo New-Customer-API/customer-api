@@ -10,8 +10,6 @@ import br.com.customer.api.customer.api.model.DatabaseSequence;
 import br.com.customer.api.customer.api.repository.CustomerRepository;
 import br.com.customer.api.customer.api.service.CustomerService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
@@ -70,21 +68,6 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public ListWrapper<CustomerResponseDTO> getAll(final PageRequestDto page) {
-        final Page<CustomerDocument> all = customerRepository.findAll(PageRequest.of(page.getPage(), page.getSize()));
-        final PageableResponseDto pageableResponseDto = new PageableResponseDto(
-                all.getPageable().getPageNumber(),
-                all.isFirst(),
-                all.isLast(),
-                all.getNumberOfElements(),
-                all.getTotalElements(),
-                all.getTotalPages());
-
-        return new ListWrapper<>(customerMapper.documentsToDtos(all.getContent()),
-                pageableResponseDto);
-    }
-
-    @Override
     public CustomerResponseDTO findCustomer(final Long id) throws NotFoundException {
 
         final Optional<CustomerDocument> byId = customerRepository.findById(id);
@@ -107,7 +90,11 @@ public class CustomerServiceImpl implements CustomerService {
             throws NotFoundException, UnprocessableEntityException {
 
         final CustomerResponseDTO customer = findCustomer(id);
-        verifyAuthenticity(requestDTO);
+
+        if (!customer.getDocument().equalsIgnoreCase(requestDTO.getDocument()) &&
+                customer.getDocumentType() != requestDTO.getDocumentType()) {
+            verifyAuthenticity(requestDTO);
+        }
 
         final CustomerDocument customerDocument = customerMapper.dtoToDocument(requestDTO);
         customerDocument.setId(customer.getId());

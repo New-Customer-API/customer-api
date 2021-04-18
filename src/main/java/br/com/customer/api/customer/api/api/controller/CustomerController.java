@@ -39,23 +39,12 @@ public class CustomerController {
     }
 
     /**
-     * Find all customer
-     *
-     * @param page pagination definition
-     * @return paginated list of customer
-     */
-    @GetMapping
-    public ResponseEntity<ListWrapper<CustomerResponseDTO>> getAll(final PageRequestDto page) {
-        return ResponseEntity.ok(customerService.getAll(page));
-    }
-
-    /**
      * Find all customer by criteria
      *
      * @param page pagination definition
      * @return paginated list of customer
      */
-    @GetMapping("/searchBy")
+    @GetMapping
     public ResponseEntity<ListWrapper<CustomerResponseDTO>> getAllCustom(final PageRequestDto page,
                                                                          final CustomerFilter customerFilter) {
         return ResponseEntity.ok(customerService.getAllCustom(page, customerFilter));
