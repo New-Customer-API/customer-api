@@ -4,7 +4,6 @@ services:
   customer_api:
     container_name: customer_api_container
     image: customer_api_image
-    command: bash -c "java -jar ./target/customer-api.jar"
     build: ./
     ports:
       - "8080:8080"
