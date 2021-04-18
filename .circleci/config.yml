@@ -1,8 +1,8 @@
 version: 2.0
 
-orbs:
-  aws-ecr: circleci/aws-ecr@6.4.0
-  aws-ecs: circleci/aws-ecs@0.0.11
+#orbs:
+#  aws-ecr: circleci/aws-ecr@6.4.0
+#  aws-ecs: circleci/aws-ecs@0.0.11
 
 jobs:
   test:
@@ -30,6 +30,8 @@ jobs:
           name: Analyze on SonarCloud
           command: ./mvnw verify sonar:sonar -Pcoverage
   aws-ecr/build-and-push-image:
+      docker:
+        - image: circleci/aws-ecr@7.0.0
       steps:
         - checkout
         - run:
