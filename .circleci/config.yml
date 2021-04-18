@@ -72,7 +72,7 @@ jobs:
       - run:
           name: Force Update Existing Service
           command: |
-            aws ecs update-service --cluster ecs-cluster --service circleci-ecs-service --force-new-deployment
+            aws ecs update-service --cluster ecs-cluster --service circleci-ecs-service --region ${AWS_DEFAULT_REGION} --force-new-deployment
 
 #  aws-ecs/deploy-service-update:
 #      steps:
@@ -100,6 +100,7 @@ workflows:
           requires:
             - analyse
       - update:
+          context: AWS
           requires:
             - deploy
 #        - aws-ecs/deploy-service-update:
