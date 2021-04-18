@@ -6,7 +6,9 @@ jobs:
       - image: circleci/openjdk:stretch
     steps:
       - checkout
-      - run: ./mvnw test
+      - run : ./mvnw test
+      - store_artifacts:
+          path:  target
 
   build:
     docker:
