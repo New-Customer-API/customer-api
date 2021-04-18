@@ -1,8 +1,8 @@
 version: 2.0
 
 orbs:
-  aws-ecr: circleci/aws-ecr@x.y.z
-  aws-ecs: circleci/aws-ecs@0x.y.z
+  aws-ecr: circleci/aws-ecr@6.4.0
+  aws-ecs: circleci/aws-ecs@0.0.11
 
 jobs:
   test:
@@ -32,16 +32,24 @@ jobs:
   aws-ecr/build-and-push-image:
       steps:
         - checkout
-      repo: "${AWS_RESOURCE_NAME_PREFIX}"
-      tag: "${CIRCLE_SHA1}"
-  aws-ecs/deploy-service-update:
-      steps:
-        - checkout
-      requires:
-        - aws-ecr/build-and-push-image # only run this job once aws-ecr/build-and-push-image has completed
-      family: "${AWS_RESOURCE_NAME_PREFIX}-service"
-      cluster-name: "${AWS_RESOURCE_NAME_PREFIX}-cluster"
-      container-image-name-updates: "container=${AWS_RESOURCE_NAME_PREFIX}-service,tag=${CIRCLE_SHA1}"
+        - run:
+            name: Setup common environment variables
+            command: |
+              echo 'export ECR_REPOSITORY_NAME="${AWS_RESOURCE_NAME_PREFIX}"' >> $BASH_ENV
+              echo 'export FULL_IMAGE_NAME="${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${ECR_REPOSITORY_NAME}:latest"' >> $BASH_ENV
+        - run:
+            name: Push image
+            command: |
+              eval $(aws ecr get-login --region $AWS_DEFAULT_REGION --no-include-email)
+              docker push $FULL_IMAGE_NAME
+#  aws-ecs/deploy-service-update:
+#      steps:
+#        - checkout
+#      requires:
+#        - aws-ecr/build-and-push-image # only run this job once aws-ecr/build-and-push-image has completed
+#      family: "${AWS_RESOURCE_NAME_PREFIX}-service"
+#      cluster-name: "${AWS_RESOURCE_NAME_PREFIX}-cluster"
+#      container-image-name-updates: "container=${AWS_RESOURCE_NAME_PREFIX}-service,tag=${CIRCLE_SHA1}"
 
 
 workflows:
@@ -55,5 +63,7 @@ workflows:
             - build
       - analyse:
           context: SonarCloud
-      - aws-ecr/build-and-push-image
-      - aws-ecs/deploy-service-update
+      - aws-ecr/build-and-push-image:
+          context: AWS
+#        - aws-ecs/deploy-service-update:
+#          context: AWS
