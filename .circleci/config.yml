@@ -13,7 +13,16 @@ jobs:
       - image: circleci/openjdk:stretch
     steps:
       - checkout
-      - run: ./mvnw -Dmaven.test.skip=true package
+      - run: ./mvnw -Dmaven.test.skip=true -Dmaven.javadoc.skip=true package
+
+  analyse:
+    docker:
+      - image: circleci/openjdk:stretch
+    steps:
+      - checkout
+      - run:
+          name: Analyze on SonarCloud
+          command: ./mvnw verify sonar:sonar
 
 workflows:
   version: 2
@@ -24,3 +33,5 @@ workflows:
       - test:
           requires:
             - build
+      - analyse
+          context: SonarCloud

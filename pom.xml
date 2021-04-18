@@ -15,6 +15,9 @@
 	<description>Customer API</description>
 	<properties>
 		<java.version>1.8</java.version>
+		<sonar.projectKey>New-Customer-API_customer-api</sonar.projectKey>
+		<sonar.organization>new-customer-api</sonar.organization>
+		<sonar.host.url>https://sonarcloud.io</sonar.host.url>
 	</properties>
 	<dependencies>
 		<dependency>
