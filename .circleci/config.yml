@@ -22,7 +22,7 @@ jobs:
       - checkout
       - run:
           name: Analyze on SonarCloud
-          command: ./mvnw verify sonar:sonar
+          command: ./mvnw verify sonar:sonar -Pcoverage
 
 workflows:
   version: 2
