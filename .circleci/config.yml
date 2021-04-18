@@ -1,8 +1,8 @@
 version: 2.0
 
-#orbs:
-#  aws-ecr: circleci/aws-ecr@6.4.0
-#  aws-ecs: circleci/aws-ecs@0.0.11
+orbs:
+  aws-ecr: circleci/aws-ecr@6.4.0
+  aws-ecs: circleci/aws-ecs@0.0.11
 
 jobs:
   test:
@@ -31,7 +31,7 @@ jobs:
           command: ./mvnw verify sonar:sonar -Pcoverage
   aws-ecr/build-and-push-image:
       docker:
-        - image: circleci/aws-ecr@7.0.0
+        - image: circleci/openjdk:stretch
       steps:
         - checkout
         - run:
@@ -39,6 +39,10 @@ jobs:
             command: |
               echo 'export ECR_REPOSITORY_NAME="${AWS_RESOURCE_NAME_PREFIX}"' >> $BASH_ENV
               echo 'export FULL_IMAGE_NAME="${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${ECR_REPOSITORY_NAME}:latest"' >> $BASH_ENV
+        - run:
+            name: Build image
+            command: |
+              docker build -t $FULL_IMAGE_NAME .
         - run:
             name: Push image
             command: |
@@ -65,7 +69,11 @@ workflows:
             - build
       - analyse:
           context: SonarCloud
+          requires:
+            - test
       - aws-ecr/build-and-push-image:
           context: AWS
+          requires:
+            - analyse
 #        - aws-ecs/deploy-service-update:
 #          context: AWS
