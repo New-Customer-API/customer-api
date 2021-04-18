@@ -4,6 +4,7 @@ import br.com.customer.api.customer.api.util.enums.DocumentType;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -21,5 +22,7 @@ public class CustomerResponseDTO {
     private String document;
     private DocumentType documentType;
     private List<String> email;
+    private LocalDateTime createdAt;
+    private LocalDateTime updateAt;
 
 }

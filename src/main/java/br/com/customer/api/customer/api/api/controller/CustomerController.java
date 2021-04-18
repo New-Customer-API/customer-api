@@ -1,15 +1,11 @@
 package br.com.customer.api.customer.api.api.controller;
 
-import br.com.customer.api.customer.api.api.dto.CustomerRequestDTO;
-import br.com.customer.api.customer.api.api.dto.CustomerResponseDTO;
+import br.com.customer.api.customer.api.api.dto.*;
 import br.com.customer.api.customer.api.exception.InternalServerErrorException;
 import br.com.customer.api.customer.api.service.CustomerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -26,7 +22,7 @@ public class CustomerController {
     private final CustomerService customerService;
 
     /**
-     * method that call repository service to save customer
+     * Create a customer
      *
      * @param customerRequestDTO the basics params for customer
      * @return created customer
@@ -36,4 +32,26 @@ public class CustomerController {
         return ResponseEntity.ok(customerService.createCustomer(customerRequestDTO));
     }
 
+    /**
+     * Find all customer
+     *
+     * @param page pagination definition
+     * @return paginated list of customer
+     */
+    @GetMapping
+    public ResponseEntity<ListWrapper<CustomerResponseDTO>> getAll(final PageRequestDto page) {
+        return ResponseEntity.ok(customerService.getAll(page));
+    }
+
+    /**
+     * Find all customer by criteria
+     *
+     * @param page pagination definition
+     * @return paginated list of customer
+     */
+    @GetMapping("/searchBy")
+    public ResponseEntity<ListWrapper<CustomerResponseDTO>> getAllCustom(final PageRequestDto page,
+                                                                         final CustomerFilter customerFilter) {
+        return ResponseEntity.ok(customerService.getAllCustom(page, customerFilter));
+    }
 }

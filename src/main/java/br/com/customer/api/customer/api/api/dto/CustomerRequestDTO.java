@@ -1,10 +1,7 @@
 package br.com.customer.api.customer.api.api.dto;
 
 import br.com.customer.api.customer.api.util.enums.DocumentType;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -17,8 +14,7 @@ import java.util.List;
  *
  * @author amanda
  */
-@Getter
-@Setter
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class CustomerRequestDTO {
