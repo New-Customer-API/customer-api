@@ -72,17 +72,7 @@ jobs:
       - run:
           name: Force Update Existing Service
           command: |
-            aws ecs update-service --cluster ecs-cluster --service circleci-ecs-service --region ${AWS_DEFAULT_REGION} --force-new-deployment
-
-#  aws-ecs/deploy-service-update:
-#      steps:
-#        - checkout
-#      requires:
-#        - aws-ecr/build-and-push-image # only run this job once aws-ecr/build-and-push-image has completed
-#      family: "${AWS_RESOURCE_NAME_PREFIX}-service"
-#      cluster-name: "${AWS_RESOURCE_NAME_PREFIX}-cluster"
-#      container-image-name-updates: "container=${AWS_RESOURCE_NAME_PREFIX}-service,tag=${CIRCLE_SHA1}"
-
+            aws ecs update-service --cluster ${AWS_CLUSTER_NAME} --service ${AWS_SERVICE_NAME} --region ${AWS_DEFAULT_REGION} --force-new-deployment
 
 workflows:
   build-then-deploy:
