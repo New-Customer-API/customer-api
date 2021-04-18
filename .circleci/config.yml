@@ -29,34 +29,34 @@ jobs:
       - run:
           name: Analyze on SonarCloud
           command: ./mvnw verify sonar:sonar -Pcoverage
-    deploy:
-      docker:
-        - image: circleci/openjdk:8-jdk
 
-      steps:
-        - checkout
-        - setup_remote_docker
-        - run:
-            name: Setup common environment variables
-            command: |
-              echo 'export ECR_REPOSITORY_NAME="${AWS_RESOURCE_NAME_PREFIX}"' >> $BASH_ENV
-              echo 'export FULL_IMAGE_NAME="${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${ECR_REPOSITORY_NAME}:latest"' >> $BASH_ENV
-        - run:
-            name: Install dependencies for AWS
-            command: |
-              sudo apt-get update
-              sudo apt-get -y -qq install awscli
-              sudo apt-get install python3-pip
-              sudo pip3 install --upgrade awscli
-        - run:
-            name: Build image
-            command: |
-              docker build -t $FULL_IMAGE_NAME .
-        - run:
-            name: Push image
-            command: |
-              eval $(aws ecr get-login --region $AWS_DEFAULT_REGION --no-include-email)
-              docker push $FULL_IMAGE_NAME
+  deploy:
+    docker:
+      - image: circleci/openjdk:8-jdk
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run:
+          name: Setup common environment variables
+          command: |
+            echo 'export ECR_REPOSITORY_NAME="${AWS_RESOURCE_NAME_PREFIX}"' >> $BASH_ENV
+            echo 'export FULL_IMAGE_NAME="${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${ECR_REPOSITORY_NAME}:latest"' >> $BASH_ENV
+      - run:
+          name: Install dependencies for AWS
+          command: |
+            sudo apt-get update
+            sudo apt-get -y -qq install awscli
+            sudo apt-get install python3-pip
+            sudo pip3 install --upgrade awscli
+      - run:
+          name: Build image
+          command: |
+            docker build -t $FULL_IMAGE_NAME .
+      - run:
+          name: Push image
+          command: |
+            eval $(aws ecr get-login --region $AWS_DEFAULT_REGION --no-include-email)
+            docker push $FULL_IMAGE_NAME
 #  aws-ecs/deploy-service-update:
 #      steps:
 #        - checkout
