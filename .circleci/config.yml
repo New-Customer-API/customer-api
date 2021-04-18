@@ -33,5 +33,5 @@ workflows:
       - test:
           requires:
             - build
-      - analyse
+      - analyse:
           context: SonarCloud
