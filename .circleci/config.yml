@@ -30,9 +30,13 @@ jobs:
           name: Analyze on SonarCloud
           command: ./mvnw verify sonar:sonar -Pcoverage
   aws-ecr/build-and-push-image:
+      steps:
+        - checkout
       repo: "${AWS_RESOURCE_NAME_PREFIX}"
       tag: "${CIRCLE_SHA1}"
   aws-ecs/deploy-service-update:
+      steps:
+        - checkout
       requires:
         - aws-ecr/build-and-push-image # only run this job once aws-ecr/build-and-push-image has completed
       family: "${AWS_RESOURCE_NAME_PREFIX}-service"
