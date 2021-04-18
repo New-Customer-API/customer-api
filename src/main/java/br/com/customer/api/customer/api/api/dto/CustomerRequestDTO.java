@@ -1,8 +1,11 @@
 package br.com.customer.api.customer.api.api.dto;
 
+import br.com.customer.api.customer.api.model.AddressDocument;
+import br.com.customer.api.customer.api.model.ContactDocument;
 import br.com.customer.api.customer.api.util.enums.DocumentType;
 import lombok.*;
 
+import javax.validation.Valid;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -33,6 +36,12 @@ public class CustomerRequestDTO {
     @NotNull
     private DocumentType documentType;
 
+    @Valid
+    private List<ContactDocument> contact;
+
     private List<@Email String> email;
+
+    @Valid
+    private List<AddressDocument> address;
 
 }

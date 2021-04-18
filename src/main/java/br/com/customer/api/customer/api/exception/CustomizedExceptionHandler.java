@@ -25,9 +25,9 @@ public class CustomizedExceptionHandler extends ResponseEntityExceptionHandler {
     public final ResponseEntity<ExceptionResponse> handleInternalServerErrorException(Exception ex, WebRequest request) {
         ExceptionResponse exceptionResponse = new ExceptionResponse.ExceptionResponseBuilder()
                 .timesTamp(new Date())
-                .message(request.getDescription(false))
-                .path(request.getContextPath())
-                .error(ex.getCause().getMessage())
+                .message(ex.getMessage())
+                .path(request.getDescription(false))
+                .error(HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase())
                 .status(500)
                 .build();
         return new ResponseEntity<>(exceptionResponse, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -37,12 +37,24 @@ public class CustomizedExceptionHandler extends ResponseEntityExceptionHandler {
     public final ResponseEntity<ExceptionResponse> handleNotFoundException(Exception ex, WebRequest request) {
         ExceptionResponse exceptionResponse = new ExceptionResponse.ExceptionResponseBuilder()
                 .timesTamp(new Date())
-                .message(request.getDescription(false))
-                .path(request.getContextPath())
-                .error(ex.getCause().getMessage())
+                .message(ex.getMessage())
+                .path(request.getDescription(false))
+                .error(HttpStatus.NOT_FOUND.getReasonPhrase())
                 .status(404)
                 .build();
         return new ResponseEntity<>(exceptionResponse, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(UnprocessableEntityException.class)
+    public final ResponseEntity<ExceptionResponse> handleUnprocessableEntityException(Exception ex, WebRequest request) {
+        ExceptionResponse exceptionResponse = new ExceptionResponse.ExceptionResponseBuilder()
+                .timesTamp(new Date())
+                .message(ex.getMessage())
+                .path(request.getDescription(false))
+                .error(HttpStatus.UNPROCESSABLE_ENTITY.getReasonPhrase())
+                .status(422)
+                .build();
+        return new ResponseEntity<>(exceptionResponse, HttpStatus.UNPROCESSABLE_ENTITY);
     }
 
     @Override
@@ -50,7 +62,7 @@ public class CustomizedExceptionHandler extends ResponseEntityExceptionHandler {
         ExceptionResponse exceptionResponse = new ExceptionResponse.ExceptionResponseBuilder()
                 .timesTamp(new Date())
                 .message(ex.getFieldError().getField() + " " + ex.getFieldError().getDefaultMessage())
-                .path(request.getContextPath())
+                .path(request.getDescription(false))
                 .error(status.getReasonPhrase())
                 .status(400)
                 .build();
