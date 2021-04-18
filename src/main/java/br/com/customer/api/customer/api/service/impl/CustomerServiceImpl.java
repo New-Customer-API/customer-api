@@ -62,7 +62,7 @@ public class CustomerServiceImpl implements CustomerService {
                 allCustomerBy.size() == page.getSize() * page.getPage() + paginated.size(),
                 paginated.size(),
                 Long.valueOf(allCustomerBy.size()),
-                allCustomerBy.size() / page.getSize());
+                allCustomerBy.size() / page.getSize() + 1);
 
         return new ListWrapper(customerMapper.documentsToDtos(paginated), pageableResponseDto);
     }

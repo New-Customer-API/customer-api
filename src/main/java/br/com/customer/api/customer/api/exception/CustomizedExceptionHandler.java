@@ -21,7 +21,7 @@ import java.util.Date;
 @RestController
 public class CustomizedExceptionHandler extends ResponseEntityExceptionHandler {
 
-    @ExceptionHandler(InternalServerErrorException.class)
+    @ExceptionHandler(RuntimeException.class)
     public final ResponseEntity<ExceptionResponse> handleInternalServerErrorException(Exception ex, WebRequest request) {
         ExceptionResponse exceptionResponse = new ExceptionResponse.ExceptionResponseBuilder()
                 .timesTamp(new Date())
