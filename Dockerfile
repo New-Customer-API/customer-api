@@ -9,3 +9,5 @@ RUN apt-get update && \
 RUN mvn clean package compile
 
 EXPOSE 8080
+
+ENTRYPOINT ["java","-jar","./target/customer-api.jar"]
