@@ -86,12 +86,16 @@ workflows:
           requires:
             - test
       - deploy:
+          filters:
+            branches:
+              only: master
           context: AWS
           requires:
             - analyse
       - update:
+          filters:
+            branches:
+              only: master
           context: AWS
           requires:
             - deploy
-#        - aws-ecs/deploy-service-update:
-#          context: AWS
