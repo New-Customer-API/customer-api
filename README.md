@@ -32,12 +32,6 @@ Clusters:
   <img src="./img/cluster.png">
 </p>
 
-Services:
-
-<p align="center">
-  <img src="./img/aws-1.png">
-</p>
-
 API Documentation:
 
 <p align="center">
